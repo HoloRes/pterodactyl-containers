@@ -14,6 +14,9 @@ RUN \
     && rm -rf /var/www/html \
     && mkdir -p /var/www/html /run/nginx /etc/nginx/conf.d/
 
+RUN curl -fsSL https://deb.nodesource.com/setup_16.x | bash - \
+    && apt-get install -y nodejs
+
 # Build phase of the container
 # This is where composer is added and pterodactyl properly setup
 FROM base as build
