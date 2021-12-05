@@ -27,13 +27,13 @@ jobs:
       uses: luoqiz/docker-images-latest-version@master
       id: panel_docker_version
       with:
-        image: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.PANEL_PROJECT_NAME }}
+        image: ghcr.io/${{ github.repository }}/panel
 
     - name: Get Daemon Docker version
       uses: luoqiz/docker-images-latest-version@master
       id: daemon_docker_version
       with:
-        image: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.DAEMON_PROJECT_NAME }}
+        image: ghcr.io/${{ github.repository }}/daemon
 
   update-version-txt:
     name: Update version.txt
@@ -60,7 +60,7 @@ jobs:
       with:
         owner: ${{ github.repository_owner }}
         repo: pterodactyl-containers
-        github_token: ${{ secrets.WORKFLOW_TOKEN }}
+        github_token: ${{ secrets.GITHUB_TOKEN }}
         workflow_file_name: update-daemon.yml
         ref: master
         trigger_workflow: true
@@ -77,7 +77,7 @@ jobs:
       with:
         owner: ${{ github.repository_owner }}
         repo: pterodactyl-containers
-        github_token: ${{ secrets.WORKFLOW_TOKEN }}
+        github_token: ${{ secrets.GITHUB_TOKEN }}
         workflow_file_name: update-panel.yml
         ref: master
         trigger_workflow: true
