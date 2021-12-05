@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 ###
 # /entrypoint.sh - Manages the startup of pterodactyl panel
