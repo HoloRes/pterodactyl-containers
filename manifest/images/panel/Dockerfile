@@ -8,9 +8,9 @@ ENV DEBIAN_FRONTEND="noninteractive" \
 RUN \
     apt-get update && \
     apt-get install -y curl gettext nginx php php php-bcmath php-common php-dom php-fileinfo \
-    php-fpm php-gd php-memcached php-mbstring php-pdo php-phar php-json \
-    php-simplexml php-tokenizer php-ctype php-zip php-xmlwriter \
-    tini gnupg \
+    php-fpm php-gd php-memcached php-mysql php-mbstring php-pdo php-phar php-json \
+    php-simplexml php-tokenizer php-ctype php-curl php-zip php-xmlwriter \
+    tini gnupg unzip netcat \
     && rm -rf /var/www/html \
     && mkdir -p /var/www/html /run/nginx /etc/nginx/conf.d/
 

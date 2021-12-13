@@ -100,7 +100,7 @@ function startServer {
 
 ## Start ##
 
-#initContainer
+initContainer
 
 case "${1}" in
     p:start)
