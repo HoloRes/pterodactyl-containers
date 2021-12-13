@@ -28,7 +28,6 @@ jobs:
         flavor: |
           latest=auto
         tags: |
-          type=sha
           type=raw,value=${{ steps.read_version.outputs.version }}
           type=raw,value=latest
 
