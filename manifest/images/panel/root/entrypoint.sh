@@ -63,7 +63,7 @@ function startServer {
     php artisan migrate --seed --force
 
     # Restore /data directory ownership to nginx.
-    chown -R nginx:nginx /data/
+    chown -R www-data:www-data /data/
     
     # Checks if SSL certificate and key exists, otherwise default to http traffic
     if [ -f "${SSL_CERT}" ] && [ -f "${SSL_CERT_KEY}" ]; then
@@ -77,7 +77,7 @@ function startServer {
     echo "--- Starting Pterodactyl Panel: ${VERSION} ---"
 
     # Run these as jobs and monitor their pid status
-    /usr/sbin/php-fpm7 --nodaemonize -c /etc/php7 & php_service_pid=$!
+    /usr/sbin/php-fpm7.4 --nodaemonize -c /etc/php7 & php_service_pid=$!
     /usr/sbin/nginx -g "daemon off;" & nginx_service_pid=$!
 
     # Monitor Child Processes
