@@ -3,18 +3,16 @@ on:
   workflow_dispatch:
   schedule:
   - cron: "0 0 * * *"
-env:
-  PANEL_PROJECT_NAME: pterodactyl-panel # Dockerhub project
-  DAEMON_PROJECT_NAME: pterodactyl-daemon
 jobs:
   get_versions:
     name: Get Versions
     runs-on: ubuntu-latest
     outputs:
-      current_panel_version: ${{ steps.panel_docker_version.outputs.tag }}
-      current_daemon_version: ${{ steps.daemon_docker_version.outputs.tag }}
+      current_panel_version: ${{ steps.current_versions.outputs.panel_version }}
+      current_daemon_version: ${{ steps.current_versions.outputs.daemon_version }}  
       latest_panel_version: ${{ steps.latest_versions.outputs.panel_version }}
       latest_daemon_version: ${{ steps.latest_versions.outputs.daemon_version}}
+
     steps:
     - name: Get Current Release
       id: latest_versions
@@ -24,16 +22,32 @@ jobs:
         echo "::set-output name=daemon_version::v$(echo $latest_info | jq -r '.wings')"
                 
     - name: Get Panel Docker version
-      uses: shrink/actions-docker-latest-image@v1
+      uses: octokit/request-action@v2.x
       id: panel_docker_version
       with:
-        repository: ghcr.io/${{ github.repository }}/panel
+        route: GET /orgs/{org}/packages/{package_type}/{package_name}/versions
+        org: ${{ github.repository_owner }}
+        package_type: container
+        package_name: ${{ github.repository }}/panel
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Get Daemon Docker version
-      uses: shrink/actions-docker-latest-image@v1
+      uses: octokit/request-action@v2.x
       id: daemon_docker_version
       with:
-        repository: ghcr.io/${{ github.repository }}/daemon
+        route: GET /orgs/{org}/packages/{package_type}/{package_name}/versions
+        org: ${{ github.repository_owner }}
+        package_type: container
+        package_name: ${{ github.repository }}/daemon
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Set Docker versions
+      id: current_versions
+      run: |
+        echo "::set-output name=panel_version::$(echo ${{ steps.panel_docker_version.outputs.data }} | jq '.[0].metadata.container.tags[]|select(startswith("v"))')"
+        echo "::set-output name=daemon_version::$(echo ${{ steps.daemon_docker_version.outputs.data }} | jq '.[0].metadata.container.tags[]|select(startswith("v"))')"
 
   update-version-txt:
     name: Update version.txt
