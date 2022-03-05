@@ -11,8 +11,8 @@ jobs:
     name: Get Versions
     runs-on: ubuntu-latest
     outputs:
-      current_panel_version: ${{ steps.panel_docker_version.outputs.version }}
-      current_daemon_version: ${{ steps.daemon_docker_version.outputs.version }}
+      current_panel_version: ${{ steps.panel_docker_version.outputs.tag }}
+      current_daemon_version: ${{ steps.daemon_docker_version.outputs.tag }}
       latest_panel_version: ${{ steps.latest_versions.outputs.panel_version }}
       latest_daemon_version: ${{ steps.latest_versions.outputs.daemon_version}}
     steps:
@@ -24,16 +24,16 @@ jobs:
         echo "::set-output name=daemon_version::v$(echo $latest_info | jq -r '.wings')"
                 
     - name: Get Panel Docker version
-      uses: luoqiz/docker-images-latest-version@master
+      uses: shrink/actions-docker-latest-image@v1
       id: panel_docker_version
       with:
-        image: ghcr.io/${{ github.repository }}/panel
+        repository: ghcr.io/${{ github.repository }}/panel
 
     - name: Get Daemon Docker version
-      uses: luoqiz/docker-images-latest-version@master
+      uses: shrink/actions-docker-latest-image@v1
       id: daemon_docker_version
       with:
-        image: ghcr.io/${{ github.repository }}/daemon
+        repository: ghcr.io/${{ github.repository }}/daemon
 
   update-version-txt:
     name: Update version.txt
