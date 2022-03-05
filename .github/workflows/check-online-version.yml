@@ -20,6 +20,10 @@ jobs:
         latest_info="$(curl -s "https://cdn.pterodactyl.io/releases/latest.json")"
         echo "::set-output name=panel_version::v$(echo $latest_info | jq -r '.panel')"
         echo "::set-output name=daemon_version::v$(echo $latest_info | jq -r '.wings')"
+
+    - name: Get repository name
+      id: repo_name
+      run: echo "::set-output name=repository::$(echo ${{ github.repository }} | cut -d'/' -f 2)"
                 
     - name: Get Panel Docker version
       uses: octokit/request-action@v2.x
@@ -28,7 +32,7 @@ jobs:
         route: GET /orgs/{org}/packages/{package_type}/{package_name}/versions
         org: ${{ github.repository_owner }}
         package_type: container
-        package_name: ${{ github.repository }}/panel
+        package_name: ${{ steps.repo_name.outputs.repository }}/panel
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -39,7 +43,7 @@ jobs:
         route: GET /orgs/{org}/packages/{package_type}/{package_name}/versions
         org: ${{ github.repository_owner }}
         package_type: container
-        package_name: ${{ github.repository }}/daemon
+        package_name: ${{ steps.repo_name.outputs.repository }}/daemon
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
