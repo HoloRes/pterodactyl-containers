@@ -33,6 +33,7 @@ jobs:
         org: ${{ github.repository_owner }}
         package_type: container
         package_name: ${{ steps.repo_name.outputs.repository }}/panel
+        per_page: 1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -44,6 +45,7 @@ jobs:
         org: ${{ github.repository_owner }}
         package_type: container
         package_name: ${{ steps.repo_name.outputs.repository }}/daemon
+        per_page: 1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
