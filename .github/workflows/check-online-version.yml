@@ -52,8 +52,8 @@ jobs:
     - name: Set Docker versions
       id: current_versions
       run: |
-        echo "::set-output name=panel_version::$(echo '${{ steps.panel_docker_version.outputs.data }}' | jq '.[0].metadata.container.tags[]|select(startswith("v"))')"
-        echo "::set-output name=daemon_version::$(echo '${{ steps.daemon_docker_version.outputs.data }}' | jq '.[0].metadata.container.tags[]|select(startswith("v"))')"
+        echo "::set-output name=panel_version::$(echo '${{ steps.panel_docker_version.outputs.data }}' | jq -r '.[0].metadata.container.tags[]|select(startswith("v"))')"
+        echo "::set-output name=daemon_version::$(echo '${{ steps.daemon_docker_version.outputs.data }}' | jq -r '.[0].metadata.container.tags[]|select(startswith("v"))')"
 
   update-version-txt:
     name: Update version.txt
