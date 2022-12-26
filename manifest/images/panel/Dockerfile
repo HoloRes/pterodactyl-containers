@@ -35,20 +35,20 @@ RUN \
     && apt-get install -y yarn git
 
 RUN \
-    git clone https://github.com/pterodactyl/panel ./ --depth 1 --branch ${GIT_BRANCH}; \
-    rm .git -rf; \
-    chmod -R 755 storage/* bootstrap/cache; \
-    find storage -type d > .storage.tmpl; \
-    curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer; \
-    cp .env.example .env; \
-    composer install --ansi --no-dev --optimize-autoloader; \
-    chown -R www-data:www-data *;
+    git clone https://github.com/pterodactyl/panel ./ --depth 1 --branch ${GIT_BRANCH} \
+    && rm .git -rf \
+    && chmod -R 755 storage/* bootstrap/cache \
+    && find storage -type d > .storage.tmpl \
+    && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer \
+    && cp .env.example .env \
+    && composer install --ansi --no-dev --optimize-autoloader \
+    && chown -R nginx:nginx *;
 
 RUN \
-    yarn install --production; \
-    yarn add cross-env; \
-    yarn run build:production; \
-    rm -rf node_modules;
+    yarn install --production \
+    && yarn add cross-env \
+    && yarn run build:production \
+    && rm -rf node_modules
 
 # Remove persistent data folders as they will be symlinked further down
 RUN rm .env ./storage -rf

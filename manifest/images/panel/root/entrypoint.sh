@@ -1,11 +1,11 @@
-#!/bin/bash
+#!/bin/sh
 
 ###
 # /entrypoint.sh - Manages the startup of pterodactyl panel
 ###
 
 # Prep Container for usage
-function initContainer {
+function checkDatabase {
     # Check if MySQL is up and running
     echo "[init] Waiting for database connection..."
     i=0
@@ -63,7 +63,7 @@ function startServer {
     php artisan migrate --seed --force
 
     # Restore /data directory ownership to nginx.
-    chown -R www-data:www-data /data/
+    chown -R nginx:nginx /data/
     
     # Checks if SSL certificate and key exists, otherwise default to http traffic
     if [ -f "${SSL_CERT}" ] && [ -f "${SSL_CERT_KEY}" ]; then
@@ -77,7 +77,7 @@ function startServer {
     echo "--- Starting Pterodactyl Panel: ${VERSION} ---"
 
     # Run these as jobs and monitor their pid status
-    /usr/sbin/php-fpm7.4 --nodaemonize -c /etc/php7 & php_service_pid=$!
+    /usr/sbin/php-fpm8 --nodaemonize -c /etc/php8 & php_service_pid=$!
     /usr/sbin/nginx -g "daemon off;" & nginx_service_pid=$!
 
     # Monitor Child Processes
@@ -100,16 +100,17 @@ function startServer {
 
 ## Start ##
 
-initContainer
-
 case "${1}" in
     p:start)
+        checkDatabase
         startServer
         ;;
     p:worker)
+        checkDatabase
         exec php /var/www/html/artisan queue:work --queue=high,standard,low --sleep=3 --tries=3
         ;;
     p:cron)
+        checkDatabase
         exec /usr/sbin/crond -f -l 0
         ;;
     *)
