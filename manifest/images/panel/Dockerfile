@@ -1,4 +1,4 @@
-FROM ubuntu:focal as base
+FROM ubuntu:jammy as base
 
 LABEL MAINTAINER="GoldElysium <goldelysium@hlresort.community>"
 
@@ -7,7 +7,7 @@ ENV DEBIAN_FRONTEND="noninteractive" \
 
 RUN \
     apt-get update && \
-    apt-get install -y curl gettext nginx php php php-bcmath php-common php-dom php-fileinfo \
+    apt-get install -y curl gettext nginx php php-bcmath php-common php-dom php-fileinfo \
     php-fpm php-gd php-memcached php-mysql php-mbstring php-pdo php-phar php-json \
     php-simplexml php-tokenizer php-ctype php-curl php-zip php-xmlwriter \
     tini gnupg unzip netcat \
