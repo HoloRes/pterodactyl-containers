@@ -63,7 +63,7 @@ function startServer {
     php artisan migrate --seed --force
 
     # Restore /data directory ownership to nginx.
-    chown -R nginx:nginx /data/
+    chown -R www-data:www-data /data/
     
     # Checks if SSL certificate and key exists, otherwise default to http traffic
     if [ -f "${SSL_CERT}" ] && [ -f "${SSL_CERT_KEY}" ]; then
