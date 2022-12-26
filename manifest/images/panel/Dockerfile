@@ -42,7 +42,7 @@ RUN \
     && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer \
     && cp .env.example .env \
     && composer install --ansi --no-dev --optimize-autoloader \
-    && chown -R nginx:nginx *;
+    && chown -R www-data:www-data *;
 
 RUN \
     yarn install --production \
