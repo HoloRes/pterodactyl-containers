@@ -14,7 +14,8 @@ RUN \
     && rm -rf /var/www/html \
     && mkdir -p /var/www/html /run/nginx /etc/nginx/conf.d/
 
-RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - \
+# Version 17+ will throw ERR_OSSL_EVP_UNSUPPORTED
+RUN curl -fsSL https://deb.nodesource.com/setup_16.x | bash - \
     && apt-get install -y nodejs
 
 # Build phase of the container
